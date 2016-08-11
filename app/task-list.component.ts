@@ -17,7 +17,13 @@ import { CompletenessPipe } from './completeness.pipe';
     <option value="isDone">Show Done</option>
     <option value="notDone" selected="selected">Show Not Done</option>
   </select>
-  <task-display *ngFor="#currentTask of taskList | completeness:selectedCompleteness"
+  <select (change)="onPriorityChange($event.target.value)" class="filter">
+    <option value="all" selected="selected">Show All</option>
+    <option value="High">High</option>
+    <option value="Medium">Medium</option>
+    <option value="Low">Low</option>
+  </select>
+  <task-display *ngFor="#currentTask of taskList | completeness:selectedCompleteness:selectedPriority"
     (click)="taskClicked(currentTask)"
     [class.selected]="currentTask === selectedTask"
     [task]='currentTask'>
@@ -32,6 +38,7 @@ export class TaskListComponent {
   public onTaskSelect: EventEmitter<Task>;
   public selectedTask: Task;
   public selectedCompleteness: string = "notDone";
+  public selectedPriority: string = "all";
   constructor() {
     this.onTaskSelect = new EventEmitter();
   }
@@ -49,4 +56,10 @@ export class TaskListComponent {
     this.selectedCompleteness = optionFromMenu;
     console.log(this.selectedCompleteness);
   }
+
+  onPriorityChange(optionFromMenu) {
+    this.selectedPriority = optionFromMenu;
+    console.log(this.selectedPriority);
+  }
+
 }
